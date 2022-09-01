@@ -4,19 +4,24 @@ export (NodePath) var goal
 onready var goal_pos = get_node(goal).global_position
 export var speed = 50
 export var arrival_tolerance = 10
-export var flip_orientation = false
-
+export var nav_layer = 1
 var path = null
+var path_idx = 0
 
 func _physics_process(delta):
 	if global_position.distance_to(goal_pos) <= arrival_tolerance:
 		queue_free()
-	move_towards_goal(delta * speed)
+	else:
+		move_towards_goal(delta * speed)
 
 
 func move_towards_goal(speed):
-	var direction = (goal_pos - global_position).normalized()
+	if not path:
+		path = Navigation2DServer.map_get_path(get_world_2d().navigation_map, global_position, goal_pos, false, nav_layer)
+		path_idx = 0
+		return
+	while global_position.distance_to(path[path_idx]) <= arrival_tolerance:
+		path_idx += 1
+	var direction = (path[path_idx] - global_position).normalized()
 	var movement = direction * speed
-	
-#	look_at(global_position + (direction * (-1 if flip_orientation else 1)))
 	move_and_collide(movement)
