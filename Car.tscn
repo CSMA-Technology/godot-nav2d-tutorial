@@ -7,7 +7,7 @@
 
 [node name="Car" type="KinematicBody2D"]
 script = ExtResource( 1 )
-goal = NodePath("../Goal")
+goal = "%CarGoal"
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )

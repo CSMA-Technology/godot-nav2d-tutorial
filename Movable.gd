@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-export (NodePath) var goal
+export (String) var goal
 onready var goal_pos = get_node(goal).global_position
 export var speed = 50
 export var arrival_tolerance = 10
